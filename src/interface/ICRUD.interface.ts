@@ -1,10 +1,10 @@
-import { Request, Response } from 'express';
+import { Socket } from 'socket.io';
 
 interface ICRUD {
-    get: (req: Request, res: Response) => void;
-    create: (req: Request, res: Response) => void;
-    update: (req: Request, res: Response) => void;
-    delete: (req: Request, res: Response) => void;
+    get: (socket: Socket, ..._message: any[]) => void;
+    create: (socket: Socket, ..._message: any[]) => Promise<boolean>;
+    update: (socket: Socket, ..._message: any[]) => Promise<void>;
+    delete: (socket: Socket, ..._message: any[]) => void;
 }
 
 export default ICRUD;

@@ -8,5 +8,4 @@ temp/
 package-lock.json
 yarn-lock.json
 docs/
-src/index.ts
 .env

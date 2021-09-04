@@ -1,15 +1,5 @@
-import { Request, Response } from 'express';
-
 export enum EValidationController {
-    USER = 'user',
-    HOME = 'home',
-    AREA = 'area',
-    ENTITY = 'entity',
-    ENTITYTYPE = 'entityType',
-    INVITATION = 'invitation',
-    MEMBER = 'member',
-    VERSION = 'version',
-    AUTOMATION = 'automation',
+    MATCH = 'match',
 }
 
 export enum EValidationMethod {
@@ -17,6 +7,7 @@ export enum EValidationMethod {
     CREATE = 'create',
     UPDATE = 'update',
     DELETE = 'delete',
+    JOIN = 'join',
     SHARE = 'share',
     UNSHARE = 'unshare',
     FORGOTPASSWORD = 'forgotPassword',
@@ -26,20 +17,19 @@ export enum EValidationMethod {
     GETUPDATEINFO = 'updateInfo',
 }
 
-export interface TValidationHanlder {
+export type TValidationReponse = {
+    isValid: boolean;
+    reason: string;
+};
+
+export type TValidationHanlder = {
+    param: any;
     method: EValidationMethod;
     controller: EValidationController;
-}
-
-export interface TValidation {
-    request: Request;
-    response: Response;
-    next: Function;
-    valid: TValidationHanlder;
-}
+};
 
 interface IValidation {
-    valid: (option: TValidation) => void;
+    valid: (option: TValidationHanlder) => TValidationReponse;
 }
 
 export default IValidation;

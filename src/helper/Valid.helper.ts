@@ -1,45 +1,20 @@
-import UserValidation from '../valid/v1/User.valid';
-import HomeValidation from '../valid/v1/Home.valid';
-import AreaValidation from '../valid/v1/Area.valid';
-import EntityValidation from '../valid/v1/Entity.valid';
-import EntityTypeValidation from '../valid/v1/EntityType.valid';
-import InvitationValidation from '../valid/v1/Invitation.valid';
-import MemberValidation from '../valid/v1/Member.valid';
-import VersionValidation from '../valid/v1/Version.valid';
-import AutomationValidation from '../valid/v1/Automation.valid';
-import IValidation, { TValidation, EValidationController } from '../interface/IValid.interface';
+import MatchValidation from '../valid/v1/Match.valid';
+import IValidation, { TValidationHanlder, EValidationController, TValidationReponse } from '../interface/IValid.interface';
 import Joi from 'joi';
 import { injectable, inject } from 'inversify';
 import ILogger from '../interface/ILogger.interface';
-import IResponser from '../interface/IResponser.interface';
-import { ErrorCode } from '../response/Error.response';
+import { ErrorCode } from 'src/response/Error.response';
 
 @injectable()
 class Validation implements IValidation {
     hashValid = {
-        [EValidationController.USER]: UserValidation,
-        [EValidationController.HOME]: HomeValidation,
-        [EValidationController.AREA]: AreaValidation,
-        [EValidationController.ENTITY]: EntityValidation,
-        [EValidationController.ENTITYTYPE]: EntityTypeValidation,
-        [EValidationController.INVITATION]: InvitationValidation,
-        [EValidationController.MEMBER]: MemberValidation,
-        [EValidationController.VERSION]: VersionValidation,
-        [EValidationController.AUTOMATION]: AutomationValidation,
+        [EValidationController.MATCH]: MatchValidation,
     };
-    private logger: ILogger;
-    private responser: IResponser;
-    constructor(@inject('Logger') logger: ILogger, @inject('Responser') responser: IResponser) {
-        this.logger = logger;
-        this.responser = responser;
-    }
+    constructor(@inject('Logger') private logger: ILogger) {}
 
-    valid = (option: TValidation): void => {
+    valid = (option: TValidationHanlder): TValidationReponse => {
         try {
-            const { request, response, next, valid } = option;
-            const { controller, method } = valid;
-            const isGET: boolean = request.method === 'GET';
-            let param: any = isGET ? request.query : request.body;
+            const { controller, method, param } = option;
 
             this.logger.Info({ path: `${controller}.controller.ts`, resource: `${method}:param`, mess: JSON.stringify(param) });
 
@@ -49,14 +24,21 @@ class Validation implements IValidation {
 
             if (validResult?.error) {
                 let errorDetail: string = validResult?.error?.details?.[0]?.message;
-                return this.responser.NotAcceptable(response, { code: errorDetail });
+                return {
+                    isValid: false,
+                    reason: errorDetail,
+                };
             }
-
-            isGET ? (request.query = validResult?.value) : (request.body = validResult?.value);
-            next();
+            return {
+                isValid: true,
+                reason: '',
+            };
         } catch (err) {
-            this.logger.Error({ path: `${option?.valid?.controller}.controller.ts`, resource: `${option?.valid?.method}:param`, mess: err });
-            return this.responser.NotAcceptable(option.response, { code: ErrorCode.NSERR_UNKNOWN });
+            this.logger.Error({ path: `${option?.controller}.controller.ts`, resource: `${option?.method}:param`, mess: err });
+            return {
+                isValid: false,
+                reason: ErrorCode.NSERR_UNKNOWN,
+            };
         }
     };
 }
