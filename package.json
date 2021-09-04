@@ -1,0 +1,70 @@
+{
+    "name": "home-service",
+    "version": "1.0.0",
+    "description": "Home service API",
+    "devDependencies": {
+        "@babel/cli": "^7.12.10",
+        "@babel/core": "^7.12.10",
+        "@babel/preset-env": "^7.12.11",
+        "@babel/preset-typescript": "^7.12.7",
+        "@types/cors": "^2.8.9",
+        "@types/dotenv": "^8.2.0",
+        "@types/express": "^4.17.11",
+        "@types/helmet": "^4.0.0",
+        "@types/node": "^8.0.29",
+        "@types/swagger-jsdoc": "^6.0.0",
+        "@types/swagger-ui-express": "^4.1.2",
+        "@types/uuid": "^8.3.0",
+        "cors": "^2.8.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "inversify": "^5.0.5",
+        "nodemon": "^2.0.7",
+        "ts-loader": "^8.0.14",
+        "ts-node": "3.3.0",
+        "typedoc": "^0.20.16",
+        "typescript": "^3.9.7",
+        "uuid": "^8.3.2",
+        "webpack": "^5.16.0",
+        "webpack-cli": "^4.4.0",
+        "webpack-node-externals": "^3.0.0"
+    },
+    "dependencies": {
+        "@sendgrid/mail": "^7.4.2",
+        "@sentry/node": "^6.10.0",
+        "@sentry/tracing": "^6.10.0",
+        "axios": "^0.21.1",
+        "etcd3": "^1.1.0",
+        "fcm-node": "^1.6.1",
+        "joi": "^17.3.0",
+        "pg": "^8.5.1",
+        "reflect-metadata": "^0.1.10",
+        "serve-index": "^1.9.1",
+        "swagger-jsdoc": "5.0.1",
+        "swagger-ui-express": "^4.1.6",
+        "typeorm": "0.2.30"
+    },
+    "scripts": {
+        "build": "rm -rf ./dist && tsc && cp ./inversify.config.ts ./ormconfig.ts ./dist",
+        "run": "node src/index.js",
+        "generate_doc": "rm -rf dist/docs && typedoc",
+        "dev_nodemon": "export NODE_ENV=development && nodemon --watch src --watch",
+        "dev_install_nodemon_debug": "export NODE_ENV=development && npm install && npm run-script generate_doc && nodemon --inspect --watch src --watch .env",
+        "start": "ts-node src/index.ts",
+        "ts-node": "ts-node ./node_modules/typeorm/cli.js",
+        "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
+        "migration:create": "node --require ts-node/register ./node_modules/typeorm/cli.js migration:generate -n ${POSTGRES_DATABASE}",
+        "migration:run": "node --require ts-node/register ./node_modules/typeorm/cli.js migration:run",
+        "migrate": "export NODE_ENV=devbuild && yarn migration:run $DATABASE_NAME"
+    },
+    "nodemonConfig": {
+        "exec": "ts-node src/index.ts",
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "ext": "ts",
+        "watch": [
+            "src"
+        ]
+    }
+}

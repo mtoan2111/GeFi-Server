@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        //   "lib": ["es5", "es6", "DOM", "ES2018"],
+        //   "target": "ES2018",
+        //   "module": "commonjs",
+        //   "moduleResolution": "node",
+        "outDir": "./dist/",
+        //   "emitDecoratorMetadata": true,
+        //   "experimentalDecorators": true,
+        // "sourceMap": true,
+        //   "esModuleInterop": true,
+        //   "allowJs": true,
+        //   "noEmit": true,
+        //   "strict": true,
+        //   "jsx": "react"
+        "baseUrl": ".",
+        "allowUnreachableCode": false,
+        "noImplicitAny": false,
+        "allowUnusedLabels": false,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
+        "lib": ["esnext"],
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitUseStrict": false,
+        "noStrictGenericChecks": false,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "resolveJsonModule": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2018",
+        "allowJs": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    },
+    "typedocOptions": {
+        "entryPoints": ["src/controller/v1"],
+        "includes": ["draw"],      
+        "out": "dist/docs"
+    }
+}
