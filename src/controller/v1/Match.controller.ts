@@ -5,8 +5,6 @@ import ICRUD from '../../interface/ICRUD.interface';
 import IValidation, { EValidationController, EValidationMethod, TValidationReponse } from '../../interface/IValid.interface';
 import IStorage from '../../interface/IStorage.interface';
 import { Match } from '../../model/v1/Match.model';
-// import { ILogger } from '../../interface/ILogger.interface';
-// import { inject } from 'inversify';
 
 @injectable()
 class MatchController implements ICRUD {
@@ -71,7 +69,6 @@ class MatchController implements ICRUD {
                 data: '',
             });
         } catch (err) {
-            console.log(err);
             return false;
         }
     };
@@ -131,7 +128,6 @@ class MatchController implements ICRUD {
                     resource: 'match::join',
                 });
             }
-            console.log([existedMatch.player[0], message?.accountId]);
 
             this.storage.set<Match>(existedMatch.id, {
                 ...existedMatch,
