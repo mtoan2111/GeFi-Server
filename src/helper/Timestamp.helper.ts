@@ -25,7 +25,11 @@ class Timestamp implements ITimestamp {
             second = second < 10 ? `0${second}` : second;
             return `${year}-${month}-${date} ${hour}:${minute}:${second}`;
         } catch (err) {
-            this.logger.Error(err);
+            this.logger.Error({
+                path: 'Timestamp.helper',
+                resource: 'convert:catch',
+                mess: JSON.stringify(err),
+            });
             return '1970-01-01 00:00:00';
         }
     };

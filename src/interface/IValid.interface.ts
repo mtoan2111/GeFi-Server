@@ -8,6 +8,7 @@ export enum EValidationMethod {
     UPDATE = 'update',
     DELETE = 'delete',
     JOIN = 'join',
+    PLAY = 'play',
     SHARE = 'share',
     UNSHARE = 'unshare',
     FORGOTPASSWORD = 'forgotPassword',

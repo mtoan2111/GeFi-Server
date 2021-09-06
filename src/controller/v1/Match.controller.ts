@@ -18,7 +18,7 @@ class MatchController implements ICRUD {
 
     get = (..._message: any[]): void => {};
 
-    create = async (socket: Socket, ...message: any): Promise<boolean> => {
+    create = async (socket: Socket, message: any): Promise<boolean> => {
         try {
             this.logger.Info({
                 path: 'Match.controller',
@@ -32,7 +32,7 @@ class MatchController implements ICRUD {
                 param: message,
             });
 
-            if (validResult.isValid) {
+            if (!validResult.isValid) {
                 return socket.emit('error', {
                     code: validResult.reason,
                     resource: 'createMatch',
@@ -40,6 +40,11 @@ class MatchController implements ICRUD {
             }
 
             const existedMatch = this.storage.contains(message?.matchId);
+            this.logger.Info({
+                path: 'Match.controller',
+                resource: 'create:existedMatch',
+                mess: JSON.stringify(existedMatch),
+            });
             if (existedMatch) {
                 return socket.emit('error', {
                     code: validResult.reason,
@@ -54,21 +59,28 @@ class MatchController implements ICRUD {
 
             await socket.join(message?.matchId);
 
+            this.logger.Info({
+                path: 'Match.controller',
+                resource: 'create:existedMatch',
+                mess: JSON.stringify(existedMatch),
+            });
+
             return socket.emit('response', {
-                resource: 'createMatch',
+                resource: 'match::create',
                 message: 'done',
                 data: '',
             });
-        } catch {
+        } catch (err) {
+            console.log(err);
             return false;
         }
     };
 
-    join = async (socket: Socket, ...message: any): Promise<boolean> => {
+    join = async (socket: Socket, message: any): Promise<boolean> => {
         try {
             this.logger.Info({
                 path: 'Match.controller',
-                resource: 'create:request',
+                resource: 'join:request',
                 mess: JSON.stringify(message),
             });
 
@@ -78,46 +90,142 @@ class MatchController implements ICRUD {
                 param: message,
             });
 
-            if (validResult.isValid) {
+            this.logger.Info({
+                path: 'Match.controller',
+                resource: 'join:validResult',
+                mess: JSON.stringify(validResult),
+            });
+
+            if (!validResult.isValid) {
                 return socket.emit('error', {
                     code: validResult.reason,
-                    resource: 'joinMatch',
+                    resource: 'match::join',
                 });
             }
 
             const existedMatch = this.storage.get<Match | undefined>(message?.matchId);
+
+            this.logger.Info({
+                path: 'Match.controller',
+                resource: 'join:existedMatch',
+                mess: JSON.stringify(existedMatch),
+            });
+
             if (typeof existedMatch === 'undefined') {
                 return socket.emit('error', {
                     code: validResult.reason,
-                    resource: 'joinMatch',
+                    resource: 'match::join',
                 });
             }
 
             if (existedMatch.player.includes(message.accountId)) {
                 return socket.emit('error', {
                     code: validResult.reason,
-                    resource: 'joinMatch',
+                    resource: 'match::join',
                 });
             }
 
+            if (existedMatch.player.length > 2) {
+                return socket.emit('error', {
+                    code: validResult.reason,
+                    resource: 'match::join',
+                });
+            }
+            console.log([existedMatch.player[0], message?.accountId]);
+
+            this.storage.set<Match>(existedMatch.id, {
+                ...existedMatch,
+                player: [existedMatch.player[0], message?.accountId],
+            });
+
             await socket.join(message?.matchId);
 
-            socket.to(message?.macthId).emit('joined', {
-                matchId: message?.matchId,
-                accountId: message?.accountId,
+            socket.to(message?.matchId).emit('response', {
+                resource: 'match::join',
+                message: 'done',
+                data: {
+                    player: [existedMatch.player[0], message?.accountId],
+                    canStart: true,
+                    first: existedMatch.player[0],
+                },
             });
 
             return socket.emit('response', {
-                resource: 'joinMatch',
+                resource: 'match::join',
                 message: 'done',
-                data: '',
+                data: {
+                    player: [existedMatch.player[0], message?.accountId],
+                    canStart: true,
+                    first: existedMatch.player[0],
+                },
             });
+
         } catch {
             return false;
         }
     };
 
-    play = (..._message: any[]): void => {};
+    play = (socket, message: any): void => {
+        this.logger.Info({
+            path: 'Match.controller',
+            resource: 'play:request',
+            mess: JSON.stringify(message),
+        });
+
+        const validResult: TValidationReponse = this.validation.valid({
+            controller: EValidationController.MATCH,
+            method: EValidationMethod.PLAY,
+            param: message,
+        });
+
+        this.logger.Info({
+            path: 'Match.controller',
+            resource: 'play:validResult',
+            mess: JSON.stringify(validResult),
+        });
+
+        if (!validResult.isValid) {
+            return socket.emit('error', {
+                code: validResult.reason,
+                resource: 'match::play',
+            });
+        }
+
+        const existedMatch = this.storage.get<Match | undefined>(message?.matchId);
+
+        this.logger.Info({
+            path: 'Match.controller',
+            resource: 'play:existedMatch',
+            mess: JSON.stringify(existedMatch),
+        });
+
+        if (typeof existedMatch === 'undefined') {
+            return socket.emit('error', {
+                code: validResult.reason,
+                resource: 'match::play',
+            });
+        }
+
+        if (!existedMatch.player.includes(message.accountId)) {
+            return socket.emit('error', {
+                code: validResult.reason,
+                resource: 'match::play',
+            });
+        }
+
+        return socket.to(message?.matchId).emit('response', {
+            resource: 'match::play',
+            message: 'done',
+            data: {
+                player: message?.accountId,
+                matchId: message?.matchId,
+                coordinate: {
+                    x: message?.x,
+                    y: message?.y,
+                },
+            },
+        });
+    };
     update = async (..._message: any[]): Promise<void> => {};
     delete = (..._message: any[]): void => {};
 }

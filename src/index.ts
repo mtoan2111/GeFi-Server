@@ -27,15 +27,15 @@ const init = (): void => {
                 resource: 'init:socket:connection',
                 mess: socket.id,
             });
-            socket.use((pkg, next) => {
-                console.log(pkg);
-                next(new Error('123'));
-            });
 
             initRoute(socket);
 
             socket.on('error', (data) => {
-                console.log(123123, data.message);
+                logger.Info({
+                    path: 'index.ts',
+                    resource: 'init:socket:error',
+                    mess: JSON.stringify(data),
+                });
             });
         });
 

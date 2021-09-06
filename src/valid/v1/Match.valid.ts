@@ -115,6 +115,46 @@ class AreaValidation {
             abortEarly: true,
         });
 
+    private play = Joi.object({
+        accountId: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_USERIDTYPE,
+            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
+            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
+            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
+            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+        }),
+
+        matchId: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_USERIDTYPE,
+            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
+            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
+            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
+            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+        }),
+
+        x: Joi.number().required().min(0).max(19).messages({
+            'string.base': ErrorCode.NSERR_USERIDTYPE,
+            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
+            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
+            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
+            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+        }),
+
+        y: Joi.number().required().min(0).max(19).messages({
+            'string.base': ErrorCode.NSERR_USERIDTYPE,
+            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
+            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
+            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
+            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+        }),
+    })
+        .messages({
+            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+        })
+        .options({
+            abortEarly: true,
+        });
+
     private update = Joi.object({
         id: Joi.string()
             .required()
@@ -251,6 +291,7 @@ class AreaValidation {
     private hashMethod = {
         [EValidationMethod.GET]: this.get,
         [EValidationMethod.JOIN]: this.join,
+        [EValidationMethod.PLAY]: this.play,
         [EValidationMethod.CREATE]: this.create,
         [EValidationMethod.UPDATE]: this.update,
         [EValidationMethod.DELETE]: this.delete,

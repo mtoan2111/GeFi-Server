@@ -6,8 +6,10 @@ const matchController = container.get<MatchController>('MatchController');
 
 export const initRoute = async (socket: Socket): Promise<void> => {
     try {
-        socket.on('match::create', matchController.create);
-        socket.on('match::join', matchController.join);
-        socket.on('match::play', matchController.play);
+        socket.on('match::create', (message) => {
+            matchController.create(socket, message);
+        });
+        socket.on('match::join', (message) => matchController.join(socket, message));
+        socket.on('match::play', (message) => matchController.play(socket, message));
     } catch (err) {}
 };

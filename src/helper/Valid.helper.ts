@@ -3,7 +3,7 @@ import IValidation, { TValidationHanlder, EValidationController, TValidationRepo
 import Joi from 'joi';
 import { injectable, inject } from 'inversify';
 import ILogger from '../interface/ILogger.interface';
-import { ErrorCode } from 'src/response/Error.response';
+import { ErrorCode } from '../response/Error.response';
 
 @injectable()
 class Validation implements IValidation {
