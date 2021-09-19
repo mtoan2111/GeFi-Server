@@ -3,19 +3,12 @@ export enum EValidationController {
 }
 
 export enum EValidationMethod {
-    GET = 'get',
     CREATE = 'create',
-    UPDATE = 'update',
-    DELETE = 'delete',
     JOIN = 'join',
+    START = 'start',
     PLAY = 'play',
-    SHARE = 'share',
-    UNSHARE = 'unshare',
-    FORGOTPASSWORD = 'forgotPassword',
-    VERIFYEMAIL = 'verifyEmail',
-    UPDATEPASSWORD = 'updatePassword',
-    NEWPASSWORD = 'newPassword',
-    GETUPDATEINFO = 'updateInfo',
+    FINISH = 'finish',
+    COMPLETE = 'complete',
 }
 
 export type TValidationReponse = {

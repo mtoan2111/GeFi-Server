@@ -10,6 +10,9 @@ export const initRoute = async (socket: Socket): Promise<void> => {
             matchController.create(socket, message);
         });
         socket.on('match::join', (message) => matchController.join(socket, message));
+        socket.on('match::start', (message) => matchController.start(socket, message));
         socket.on('match::play', (message) => matchController.play(socket, message));
+        socket.on('match::finish', (message) => matchController.finish(socket, message));
+        socket.on('match::complete', (message) => matchController.complete(socket, message));
     } catch (err) {}
 };

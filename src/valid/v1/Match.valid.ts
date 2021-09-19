@@ -4,88 +4,23 @@ import { EValidationMethod } from '../../interface/IValid.interface';
 // import { ValidationMethod } from '../../constant';
 
 class AreaValidation {
-    private get = Joi.object({
-        id: Joi.string()
-            .optional()
-            .allow(null, '')
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_AREAIDTYPE,
-                'string.max': ErrorCode.NSERR_AREAIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_AREAIDWRONGFORMAT,
-            }),
-        homeId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_HOMEIDTYPE,
-                'string.max': ErrorCode.NSERR_HOMEIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_HOMEIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_HOMEIDEMPTY,
-                'any.required': ErrorCode.NSERR_HOMEIDREQUIRED,
-            }),
-        userId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_USERIDTYPE,
-                'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-                'any.required': ErrorCode.NSERR_USERIDREQUIRED,
-            }),
-        name: Joi.string().optional().allow(null, '').max(256).trim().messages({
-            'string.base': ErrorCode.NSERR_AREANAMETYPE,
-            'string.max': ErrorCode.NSERR_AREANAMEOUTOFBOUND,
-        }),
-        appCode: Joi.string().required().max(256).trim().messages({
-            'string.base': ErrorCode.NSERR_APPCODETYPE,
-            'string.max': ErrorCode.NSERR_APPCODEOUTOFBOUND,
-            'string.empty': ErrorCode.NSERR_APPCODEEMPTY,
-            'any.required': ErrorCode.NSERR_APPCODEREQUIRED,
-        }),
-    })
-        .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
-        })
-        .options({
-            abortEarly: true,
-        });
-
     private create = Joi.object({
         accountId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_ACCOUNTIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_ACCOUNTIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_ACCOUNTIDEMPTY,
+            'any.required': ErrorCode.NSERR_ACCOUNTIDREQUIRE,
         }),
 
         matchId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
         }),
     })
         .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
         })
         .options({
             abortEarly: true,
@@ -93,23 +28,36 @@ class AreaValidation {
 
     private join = Joi.object({
         accountId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_ACCOUNTIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_ACCOUNTIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_ACCOUNTIDEMPTY,
+            'any.required': ErrorCode.NSERR_ACCOUNTIDREQUIRE,
         }),
 
         matchId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
         }),
     })
         .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
+        })
+        .options({
+            abortEarly: true,
+        });
+
+    private start = Joi.object({
+        matchId: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
+        }),
+    })
+        .messages({
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
         })
         .options({
             abortEarly: true,
@@ -117,184 +65,91 @@ class AreaValidation {
 
     private play = Joi.object({
         accountId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_ACCOUNTIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_ACCOUNTIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_ACCOUNTIDEMPTY,
+            'any.required': ErrorCode.NSERR_ACCOUNTIDREQUIRE,
         }),
 
         matchId: Joi.string().required().max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
         }),
 
         x: Joi.number().required().min(0).max(19).messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_XAXISWRONGTYPE,
+            'string.max': ErrorCode.NSERR_XAXISWRONGFORMAT,
+            'string.empty': ErrorCode.NSERR_XAXISEMPTY,
+            'any.required': ErrorCode.NSERR_XAXISREQUIRED,
         }),
 
         y: Joi.number().required().min(0).max(19).messages({
-            'string.base': ErrorCode.NSERR_USERIDTYPE,
-            'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-            'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-            'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-            'any.required': ErrorCode.NSERR_USERIDREQUIRED,
+            'string.base': ErrorCode.NSERR_YAXISWRONGTYPE,
+            'string.max': ErrorCode.NSERR_YAXISOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_YAXISEMPTY,
+            'any.required': ErrorCode.NSERR_YAXISREQUIRED,
         }),
     })
         .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
         })
         .options({
             abortEarly: true,
         });
 
-    private update = Joi.object({
-        id: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_AREAIDTYPE,
-                'string.max': ErrorCode.NSERR_AREAIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_AREAIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_AREAIDEMPTY,
-                'any.required': ErrorCode.NSERR_AREAIDREQUIRED,
-            }),
-        homeId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_HOMEIDTYPE,
-                'string.max': ErrorCode.NSERR_HOMEIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_HOMEIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_HOMEIDEMPTY,
-                'any.required': ErrorCode.NSERR_HOMEIDREQUIRED,
-            }),
-        userId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_USERIDTYPE,
-                'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-                'any.required': ErrorCode.NSERR_USERIDREQUIRED,
-            }),
-        name: Joi.string().optional().allow(null, '').max(256).trim().messages({
-            'string.base': ErrorCode.NSERR_AREANAMETYPE,
-            'string.max': ErrorCode.NSERR_AREANAMEOUTOFBOUND,
+    private finish = Joi.object({
+        matchId: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
         }),
-        logo: Joi.string().optional().allow(null, '').max(128).trim().messages({
-            'string.base': ErrorCode.NSERR_AREALOGOTYPE,
-            'string.max': ErrorCode.NSERR_AREALOGOOUTOFBOUND,
+
+        reason: Joi.string().required().max(128).valid('CANCEL', 'WINNING').trim().messages({
+            'string.base': ErrorCode.NSERR_REASONEMPTY,
+            'string.max': ErrorCode.NSERR_REASONOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_REASONEMPTY,
+            'any.required': ErrorCode.NSERR_REASONREQUIRED,
         }),
-        pos: Joi.number().optional().allow(null, '').min(-1).max(127).messages({
-            'number.base': ErrorCode.NSERR_AREAPOSITIONTYPE,
-            'number.min': ErrorCode.NSERR_AREAPOSITIONOUTOFBOUND,
-            'number.max': ErrorCode.NSERR_AREAPOSITIONOUTOFBOUND,
-        }),
-        appCode: Joi.string().required().max(256).trim().messages({
-            'string.base': ErrorCode.NSERR_APPCODETYPE,
-            'string.max': ErrorCode.NSERR_APPCODEOUTOFBOUND,
-            'string.empty': ErrorCode.NSERR_APPCODEEMPTY,
-            'any.required': ErrorCode.NSERR_APPCODEREQUIRED,
+
+        winner: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_WINNEREMPTY,
+            'string.max': ErrorCode.NSERR_WINNEROUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_WINNEREMPTY,
+            'any.required': ErrorCode.NSERR_WINNERREQUIRED,
         }),
     })
         .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
         })
         .options({
             abortEarly: true,
         });
 
-    private delete = Joi.object({
-        id: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_AREAIDTYPE,
-                'string.max': ErrorCode.NSERR_AREAIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_AREAIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_AREAIDEMPTY,
-                'any.required': ErrorCode.NSERR_AREAIDREQUIRED,
-            }),
-        homeId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_HOMEIDTYPE,
-                'string.max': ErrorCode.NSERR_HOMEIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_HOMEIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_HOMEIDEMPTY,
-                'any.required': ErrorCode.NSERR_HOMEIDREQUIRED,
-            }),
-        userId: Joi.string()
-            .required()
-            .max(128)
-            .trim()
-            .uuid({
-                version: 'uuidv4',
-                separator: '-',
-            })
-            .messages({
-                'string.base': ErrorCode.NSERR_USERIDTYPE,
-                'string.max': ErrorCode.NSERR_USERIDOUTOFBOUND,
-                'string.guid': ErrorCode.NSERR_USERIDWRONGFORMAT,
-                'string.empty': ErrorCode.NSERR_USERIDEMPTY,
-                'any.required': ErrorCode.NSERR_USERIDREQUIRED,
-            }),
-        appCode: Joi.string().required().max(256).trim().messages({
-            'string.base': ErrorCode.NSERR_APPCODETYPE,
-            'string.max': ErrorCode.NSERR_APPCODEOUTOFBOUND,
-            'string.empty': ErrorCode.NSERR_APPCODEEMPTY,
-            'any.required': ErrorCode.NSERR_APPCODEREQUIRED,
+    private complete = Joi.object({
+        matchId: Joi.string().required().max(128).trim().messages({
+            'string.base': ErrorCode.NSERR_MATCHIDWRONGTYPE,
+            'string.max': ErrorCode.NSERR_MATCHIDOUTOFBOUND,
+            'string.empty': ErrorCode.NSERR_MATCHIDEMPTY,
+            'any.required': ErrorCode.NSERR_MATCHIDREQUIRED,
         }),
     })
         .messages({
-            'object.unknown': ErrorCode.NSERR_PARAMUNKNOWN,
+            'object.unknown': ErrorCode.NSERR_INVALIDPARAM,
         })
         .options({
             abortEarly: true,
         });
 
     private hashMethod = {
-        [EValidationMethod.GET]: this.get,
-        [EValidationMethod.JOIN]: this.join,
-        [EValidationMethod.PLAY]: this.play,
         [EValidationMethod.CREATE]: this.create,
-        [EValidationMethod.UPDATE]: this.update,
-        [EValidationMethod.DELETE]: this.delete,
+        [EValidationMethod.JOIN]: this.join,
+        [EValidationMethod.START]: this.start,
+        [EValidationMethod.PLAY]: this.play,
+        [EValidationMethod.FINISH]: this.finish,
+        [EValidationMethod.COMPLETE]: this.complete,
     };
 
     public getValidSchema = (method: string): Joi.ObjectSchema<any> => {

@@ -37,7 +37,7 @@ class Validation implements IValidation {
             this.logger.Error({ path: `${option?.controller}.controller.ts`, resource: `${option?.method}:param`, mess: err });
             return {
                 isValid: false,
-                reason: ErrorCode.NSERR_UNKNOWN,
+                reason: ErrorCode.NSERR_UNKNOW,
             };
         }
     };
